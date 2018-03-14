@@ -28,6 +28,6 @@ RUN apt-get update -qq && \
 
 ENV EDITOR vim
 
-LABEL Name=280infrascript Version=0.0.5
+LABEL Name=AzuredScript Version=0.0.5
 
 
