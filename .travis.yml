@@ -6,8 +6,5 @@ services:
 before_install:
 
   - docker build -t azured/multi-script .
-
-
-
-docker login "$DOCKER_REGISTRY" -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
-docker push azured/multi-script
+  - docker login "$DOCKER_REGISTRY" -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
+  - docker push azured/multi-script
