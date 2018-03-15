@@ -24,7 +24,8 @@ RUN apt-get update -qq && \
     apt-get install -qqy  azure-cli && \
     apt-get install -qqy  certbot -t jessie-backports && \
     curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl  && mv kubectl /usr/local/bin/ && \
-    chmod +x /usr/local/bin/kubectl
+    chmod +x /usr/local/bin/kubectl && \
+    chmod +x /scripts/* -R 
 
 ENV EDITOR vim
 
