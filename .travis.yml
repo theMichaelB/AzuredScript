@@ -7,4 +7,5 @@ before_install:
   - ls 
   - docker build -t azured/multi-script .
   - docker login "$DOCKER_REGISTRY" -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
+  - docker tag azured/multi-script $DOCKER_REGISTRY/azured/multi-script
   - docker push $DOCKER_REGISTRY/azured/multi-script
