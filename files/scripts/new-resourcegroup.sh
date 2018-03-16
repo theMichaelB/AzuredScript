@@ -8,4 +8,4 @@ RANDOM=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 5 | head -n 1)
 RG="Testrg-$RANDOM"
 az group create --name $RG --location northeurope 
 fi 
-curl -X POST -d "fizz=end" https://requestb.in/16g7zgz1
+curl -X POST -d "fizz=end$?" https://requestb.in/16g7zgz1
