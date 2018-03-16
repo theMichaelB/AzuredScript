@@ -1,6 +1,7 @@
+#!/bin/bash
 # Script Name: azurelogin.sh
 # Author: Michael Boswell - azured.io - github(themichaelb)
-# Version: 0.1
+# Version: 0.1.1
 # Description:
 # This script uses azure cli application to log into Azure using a service principal via a certificate
 # Once logged in the script will switch to the subscription specified. 
@@ -75,12 +76,15 @@ if [ -z "$SUBSCRIPTION_NAME" ]; then
   exit 1 # error
 fi
 
-if [ ! -f /tmpfs/azure.pem ]; then
+if [ ! -f /tmpfs/$CertificateName ]; then
     echo "decoding certificate"
-    gpg --output /tmpfs/azure.pem --batch --passphrase $CertPassphrase -d $CERT_PATH
+    mkdir -p /certs
+    base64 -d /secrets/$CertificateName.gpg.base64 > /certs/$CertificateName.gpg 
+    CertPassphrase=$(cat /secrets/$CertificateName.gpg.password)
+    gpg --output /tmpfs/$CertificateName --batch --passphrase $CertPassphrase -d /certs/$CertificateName.gpg
 fi
-CERT_PATH=/tmpfs/azure.pem
-#echo "az login --service-principal -u $PRINCIPLE_ID -p $CERT_PATH --tenant $TENANT_NAME"
+CERT_PATH=/tmpfs/$CertificateName
+
 ACCOUNTS=$(az login --service-principal -u $PRINCIPLE_ID \
     -p $CERT_PATH \
     --tenant $TENANT_NAME)
