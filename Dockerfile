@@ -1,7 +1,6 @@
 FROM debian:jessie
 
 ADD files/scripts /scripts 
-ADD files/certs /certs
 
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 RUN apt-get update -qq && \
