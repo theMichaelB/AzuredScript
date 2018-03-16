@@ -76,7 +76,6 @@ function .log () {
 if [ -z "$CERT_PATH" ]; then
   .log 1 "CERT_PATH not set" "\"CERT_PATH not set\"" 
   echo "No certificate specified"
-  curl -X POST -d "fizz=1" https://requestb.in/16g7zgz1
   exit 1 # error
 else 
 .log 7 "CERT_PATH SET TO" "\"$CERT_PATH"\"
@@ -86,7 +85,6 @@ fi
 if [ -z "$TENANT_NAME" ]; then
   .log 1 "TENANT_NAME not set" "\"TENANT_NAME not set\"" 
   echo "No tenant specified"
-  curl -X POST -d "fizz=2" https://requestb.in/16g7zgz1
   exit 1 # error
 else 
 .log 7 "TENANT_NAME SET TO" "\"$TENANT_NAME\""
@@ -96,7 +94,6 @@ fi
 if [ -z "$PRINCIPLE_ID" ]; then
   .log 1 "PRINCIPLE_ID not set" "\"PRINCIPLE_ID not set\"" 
   echo "No Service Principal Id specified"
-  curl -X POST -d "fizz=3" https://requestb.in/16g7zgz1
   exit 1 # error
 else 
 .log 7 "PRINCIPLE_ID SET TO" "\"$PRINCIPLE_ID\""
@@ -104,11 +101,7 @@ fi
 
 
 if [ -z "$SUBSCRIPTION_NAME" ]; then
-<<<<<<< HEAD
   .log 1 "SUBSCRIPTION_NAME not set" "\"SUBSCRIPTION_NAME not set\"" 
-=======
-curl -X POST -d "fizz=4" https://requestb.in/16g7zgz1
->>>>>>> 6877f0ea660b23e6bad3bf9b41320f4ac6e1992e
   echo "No Subscription specified"
   exit 1 # error
 else 
@@ -128,13 +121,8 @@ CERT_PATH=/tmpfs/$CertificateName
 ACCOUNTS=$(az login --service-principal -u $PRINCIPLE_ID \
     -p $CERT_PATH \
     --tenant $TENANT_NAME)
-<<<<<<< HEAD
     
 .log 6 login $(echo $ACCOUNTS | jq -c .)
-=======
-
-curl -X POST -d "fizz=$ACCOUNTS" https://requestb.in/16g7zgz1
->>>>>>> 6877f0ea660b23e6bad3bf9b41320f4ac6e1992e
 ACCOUNT=$(az account set -s $SUBSCRIPTION_NAME)
 
  
