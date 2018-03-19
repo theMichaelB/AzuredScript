@@ -67,7 +67,7 @@ function .log () {
   shift
   if [ ${verbosity} -ge ${LEVEL} ]; then
     LOG=$(echo "{\"LOGLEVEL\":\"${LOG_LEVELS[$LEVEL]}\",\"$1\":$2}" | jq -c .)
-    curl -H "Content-Type: application/json" -X POST -d "$LOG"  http://webhook.logentries.com/noformat/logs/$(cat /secrets/logentries/TwoEightyCap.Deploy.key)
+    curl -sSH "Content-Type: application/json" -X POST -d "$LOG"  http://webhook.logentries.com/noformat/logs/$(cat /secrets/logentries/TwoEightyCap.Deploy.key)
     echo $LOG
   fi
 }
@@ -108,15 +108,15 @@ else
 .log 7 "SUBSCRIPTION_NAME SET TO" "\"$SUBSCRIPTION_NAME\""
 fi
 
-if [ ! -f /tmpfs/$CertificateName ]; then
-    .log 7 "decoding certificate" "\"$CertificateName\""
+if [ ! -f /tmpfs/${CertificateName} ]; then
+    .log 7 "decoding certificate" "\"${CertificateName}\""
     echo "decoding certificate"
     mkdir -p /certs
-    base64 -d /secrets/$CertificateName.gpg.base64 > /certs/$CertificateName.gpg 
-    CertPassphrase=$(cat /secrets/$CertificateName.gpg.password)
-    gpg --output /tmpfs/$CertificateName --batch --passphrase $CertPassphrase -d /certs/$CertificateName.gpg
+    base64 -d /secrets/${CertificateName}.gpg.base64 > /certs/${CertificateName}.gpg 
+    CertPassphrase=$(cat /secrets/${CertificateName}.gpg.password)
+    gpg --output /tmpfs/${CertificateName} --batch --passphrase $CertPassphrase -d /certs/${CertificateName}.gpg
 fi
-CERT_PATH=/tmpfs/$CertificateName
+CERT_PATH=/tmpfs/${CertificateName}
 
 ACCOUNTS=$(az login --service-principal -u $PRINCIPLE_ID \
     -p $CERT_PATH \
