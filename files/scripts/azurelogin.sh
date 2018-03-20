@@ -114,6 +114,11 @@ if [ ! -f /tmpfs/${CertificateName} ]; then
     mkdir -p /certs
     base64 -d /secrets/${CertificateName}.gpg.base64 > /certs/${CertificateName}.gpg 
     ls -al /secrets/ 
+    head /secrets/azure.pem.gpg.base64
+    head /secrets/azure.pem.gpg.password
+    ls /secrets/${CertificateName}.gpg.base64 
+    cat /secrets/${CertificateName}.gpg.base64 
+
     CertPassphrase=$(cat /secrets/${CertificateName}.gpg.password)
     gpg --output /tmpfs/${CertificateName} --batch --passphrase $CertPassphrase -d /certs/${CertificateName}.gpg
 fi
