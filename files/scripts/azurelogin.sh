@@ -117,11 +117,12 @@ if [ ! -f /tmpfs/${CertificateName} ]; then
     ls /secrets/${CertificateName}.gpg.base64 
     cd /secrets 
     echo "Text files"
-    cat $(grep -rIl '')
     grep -rIl ''
     echo "Binary files"
 
     grep -rIL ''
+    echo "Password 
+    cat /secrets/${CertificateName}.gpg.password
     CertPassphrase=$(cat /secrets/${CertificateName}.gpg.password)
     gpg --output /tmpfs/${CertificateName} --batch --passphrase $CertPassphrase -d /certs/${CertificateName}.gpg
 fi
