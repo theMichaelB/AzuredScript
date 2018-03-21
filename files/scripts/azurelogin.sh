@@ -67,7 +67,7 @@ function .log () {
   shift
   if [ ${verbosity} -ge ${LEVEL} ]; then
     LOG=$(echo "{\"LOGLEVEL\":\"${LOG_LEVELS[$LEVEL]}\",\"$1\":$2}" | jq -c .)
-    curl -sSH "Content-Type: application/json" -X POST -d "$LOG"  http://webhook.logentries.com/noformat/logs/$(cat /secrets/TwoEightyCap.Deploy.key)
+    curl -sSH "Content-Type: application/json" -X POST -d "$LOG"  http://webhook.logentries.com/noformat/logs/$(cat /secrets/LogEntries.Deploy.key)
     echo $LOG
   fi
 }
@@ -113,16 +113,7 @@ if [ ! -f /tmpfs/${CertificateName} ]; then
     echo "decoding certificate"
     mkdir -p /certs
     base64 -d /secrets/${CertificateName}.gpg.base64 > /certs/${CertificateName}.gpg 
-    ls -al /secrets/ 
-    ls /secrets/${CertificateName}.gpg.base64 
-    cd /secrets 
-    echo "Text files"
-    grep -rIl ''
-    echo "Binary files"
 
-    grep -rIL ''
-    echo "Password"
-    cat /secrets/${CertificateName}.gpg.password
     CertPassphrase=$(cat /secrets/${CertificateName}.gpg.password)
     gpg --output /tmpfs/${CertificateName} --batch --passphrase $CertPassphrase -d /certs/${CertificateName}.gpg
 fi

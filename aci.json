@@ -1,0 +1,133 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+      "DeploymentName": {
+          "type": "string"
+      },
+      "RegistryServer": {
+          "type": "string"
+      },
+      "RegistryUser": {
+          "type": "string"
+      },
+      "RegistryPassword": {
+          "type": "securestring"
+      },
+      "CertificateName": {
+          "type": "string"
+      },
+      "TenantId": {
+          "type": "string"
+      },
+      "image": {
+          "type": "string"
+      },
+      "command": {
+          "type": "string"
+      },
+      "ServicePrincipleIdentity": {
+          "type": "string"
+      },
+      "Subscription": {
+          "type": "string"
+      },
+      "certificateData": {
+          "type": "securestring"
+      },
+      "certificatePwd": {
+          "type": "securestring"
+      },
+      "LogEntries.Deploy.key": {
+          "type": "securestring"
+      }
+  },
+  "variables": {},
+  "resources": [
+      {
+          "name": "[toLower(parameters('DeploymentName'))]",
+          "type": "Microsoft.ContainerInstance/containerGroups",
+          "apiVersion": "2018-02-01-preview",
+          "location": "[resourceGroup().location]",
+          "tags": {},
+          "properties": {
+              "containers": [
+                  {
+                      "name": "[toLower(parameters('DeploymentName'))]",
+                      "properties": {
+                          "image": "[toLower(parameters('image'))]",
+                          "command": [
+                              "[toLower(parameters('command'))]"
+                          ],
+                          "volumeMounts": [
+                              {
+                                  "name": "azure-secrets",
+                                  "mountPath": "/secrets",
+                                  "readOnly": false
+                              },
+                              {
+                                  "name": "tmpfs",
+                                  "mountPath": "/tmpfs",
+                                  "readOnly": false
+                              }
+                          ],
+                          "environmentVariables": [
+                              {
+                                  "name": "CertificateName",
+                                  "value": "[parameters('CertificateName')]"
+                              },
+                              {
+                                  "name": "TenantId",
+                                  "value": "[parameters('TenantId')]"
+                              },
+                              {
+                                  "name": "ServicePrincipleIdentity",
+                                  "value": "[parameters('ServicePrincipleIdentity')]"
+                              },
+                              {
+                                  "name": "Subscription",
+                                  "value": "[parameters('Subscription')]"
+                              }
+                          ],
+                          "resources": {
+                              "requests": {
+                                  "memoryInGB": 1,
+                                  "cpu": 1
+                              },
+                              "limits": {
+                                  "memoryInGB": 1,
+                                  "cpu": 1
+                              }
+                          }
+                      }
+                  }
+              ],
+              "imageRegistryCredentials": [
+                  {
+                      "server": "[parameters('RegistryServer')]",
+                      "username": "[parameters('RegistryUser')]",
+                      "password": "[parameters('RegistryPassword')]"
+                  }
+              ],
+              "restartPolicy": "Never",
+              "osType": "Linux",
+              "volumes": [
+                  {
+                      "name": "azure-secrets",
+                      "secret": {
+                          "azure.pem.gpg.password": "[parameters('certificatePwd')]",
+                          "LogEntries.Deploy.key": "[parameters('LogEntries.Deploy.key')]",
+                          "azure.pem.gpg.base64": "[base64(parameters('certificateData'))]"
+                      }
+                  },
+                  {
+                      "name": "tmpfs",
+                      "secret": {
+                      }
+                  }
+              ]
+          }
+      }
+  ],
+  "outputs": {}
+}
