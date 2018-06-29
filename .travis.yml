@@ -10,8 +10,8 @@ env:
 
 
 script:
+  - echo  "$DOCKER_PASSWORD" | docker login "$DOCKER_REGISTRY" -u "$DOCKER_USERNAME" --password-stdin
   - docker build -t $DOCKER_REGISTRY/azured/multi-script:$COMMIT .
-  - docker login "$DOCKER_REGISTRY" -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
   - docker tag $DOCKER_REGISTRY/azured/multi-script:$COMMIT $DOCKER_REGISTRY/azured/multi-script
   - docker tag $DOCKER_REGISTRY/azured/multi-script:$COMMIT $DOCKER_REGISTRY/azured/multi-script:$TRAVIS_BUILD_NUMBER
   - docker push $DOCKER_REGISTRY/azured/multi-script
